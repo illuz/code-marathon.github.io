@@ -2,6 +2,7 @@
     {"username":"CharlesHu","for_hire":true},
     {"username":"taizilongxu","for_hire":true},
     {"username":"lliquid", "for_hire":true},
+	{"username":"airycanon", "for_hire":true},
     {"username":"yujinqiu", "for_hire":false},
     {"username":"dd1994","for_hire":false},
     {"username":"bingwen","for_hire":false},
@@ -11,5 +12,5 @@
     {"username":"blueandhack","for_hire":false},
     {"username":"ddkangfu", "for_hire":false},
     {"username":"liuslevis", "for_hire":false},
-    {"username":"john990", "for_hire":false},
+    {"username":"john990", "for_hire":false}
 ]

@@ -1,23 +1,39 @@
 $(function(){
-    // 照着手册实现的 - -!
     $.getJSON("data/members.json", function(members){
+
         $('#marathon-total').html(members.length);
-        var items = [];
-        $.each(members, function(key, member) {
+        var membersTemplate = _.template($('#membersTemplate').html());
+        $('#members').html(membersTemplate({ members: members}));
 
-            var html = "<div class='member'><h3><a href='https://github.com/"+member.username+"'>" + member.username + "</a> ";
-            if (member.for_hire == true) {
-                html += '(for hire)</h3>';
-            } else {
-                html += '</h3>';
-            }
-            html += '<div class="contributions">';
-            html += '<iframe scrolling="no" src="http://jsonproxy.sinaapp.com/index.php?username='+member.username+'"></iframe>';
-            html += '</div></div>';
-            items.push(html);
-        });
-        var list = items.join("");
-        $('#members').html(list);
+        function mappingStreak(result){
+            return {
+                yearOfContributions: {
+                    total: result[0].span[1].content,
+                    range: result[0].span[2].content
+                },
+                longestStreak: {
+                    days:  result[1].span[1].content,
+                    range: result[1].span[2].content
+                },
+                currentStreak: {
+                    days:  result[2].span[1].content,
+                    range: result[2].span[2].content
+                }
+            };
+        }
 
+        var appendMemberStreak = function (key, member){
+            var queryString  = "select * from html where url = 'https://www.github.com/" + member.username + "'";
+            queryString     += ' and xpath = \'//*[contains(concat(" ", normalize-space(@class), " "), " contrib-column ")]\'';
+            var queryEnv     = 'store://datatables.org/alltableswithkeys';
+            var queryData    = { q: queryString, format: 'json', env: queryEnv };
+            $.getJSON( "https://query.yahooapis.com/v1/public/yql?", queryData, function(res) {
+                result = mappingStreak (res.query.results.div);
+                var streakTemplate = _.template($('#streakTemplate').html());
+                $('#member_' + member.username).append(streakTemplate(result));
+            });
+        }
+
+        $.each(members, appendMemberStreak);
     });
 });

@@ -96,7 +96,11 @@ iframe {
 
 
 .member iframe{
-   background-color: #ffffff;
+    background-color: #ffffff;
+}
+
+.member .streaks{
+    color: white;
 }
 /*content end*/
 
